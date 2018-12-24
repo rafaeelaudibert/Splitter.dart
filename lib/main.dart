@@ -1,47 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:splitter/ui/login_page.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return new MaterialApp(
       title: 'Splitter',
-      theme: ThemeData(
+      theme: new ThemeData(
+
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Splitter'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(        
-        child: Column(          
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Your money-splitting app!',
-            )
-          ],
-        ),
-      ),
+      home: new LoginPage(),
     );
   }
 }
