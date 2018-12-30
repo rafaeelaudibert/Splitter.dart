@@ -53,9 +53,8 @@ class TabIndicationPainter extends CustomPainter {
 
     double pageOffset = pos.extentBefore / fullExtent;
 
-    bool left2right = dxEntry < dxTarget;
-    Offset entry = new Offset(left2right ? dxEntry: dxTarget, dy);
-    Offset target = new Offset(left2right ? dxTarget : dxEntry, dy);
+    Offset entry = new Offset(min(dxEntry, dxTarget), dy);
+    Offset target = new Offset(max(dxEntry, dxTarget), dy);
 
     Path path = new Path();
     path.addArc(
@@ -66,7 +65,7 @@ class TabIndicationPainter extends CustomPainter {
         new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-    canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
+    canvas.drawShadow(path, Color(0xFFFBAB66), 3.0, true);
     canvas.drawPath(path, painter);
   }
 

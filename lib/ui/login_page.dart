@@ -22,6 +22,7 @@
   SOFTWARE.
 */
 
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -76,9 +77,7 @@ class _LoginPageState extends State<LoginPage>
         child: SingleChildScrollView(
               child: Container(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height >= 775.0
-                    ? MediaQuery.of(context).size.height
-                    : 775.0,
+                height: max(MediaQuery.of(context).size.height, 775.0),
                 decoration: new BoxDecoration(gradient: Theme.Colors.primaryGradient),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -88,7 +87,7 @@ class _LoginPageState extends State<LoginPage>
                       child: new Image(
                           width: 250.0,
                           height: 191.0,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.scaleDown,
                           image: new AssetImage('assets/img/login_logo.png')),
                     ),
                     Padding(
@@ -166,8 +165,8 @@ class _LoginPageState extends State<LoginPage>
             fontSize: 16.0,
             fontFamily: "WorkSansSemiBold"),
       ),
-      backgroundColor: Colors.blue,
-      duration: Duration(seconds: 3),
+      backgroundColor: Theme.Colors.backgroundPink,
+      duration: Duration(seconds: 2),
     ));
   }
 
@@ -260,11 +259,7 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
+                      Container(width: 250.0, height: 1.0, color: Colors.grey[400]),
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
                         child: TextField(
@@ -317,7 +312,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
-                    splashColor: Theme.Colors.backgroundBlue,
+                    splashColor: Theme.Colors.backgroundBlue.withOpacity(0.3),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 12.0, horizontal: 75.0),
@@ -492,7 +487,7 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 child: MaterialButton(
                     highlightColor: Colors.transparent,
-                    splashColor: Theme.Colors.backgroundBlue,
+                    splashColor: Theme.Colors.backgroundBlue.withOpacity(0.3),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 12.0, horizontal: 60.0),
@@ -515,7 +510,7 @@ class _LoginPageState extends State<LoginPage>
   }
 
   void _onSignInButtonPress() {
-    _pageController.animateToPage(0,
+    _pageController?.animateToPage(0,
         duration: Duration(milliseconds: 500), curve: Curves.decelerate);
   }
 

@@ -23,15 +23,14 @@
 */
 
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 
 class Colors {
 
   const Colors();
 
-  static const Color backgroundPink = const Color(0xFFfc00ff);
-  static const Color backgroundBlue = const Color(0xFF00dbde);
+  static const Color backgroundPink = const Color(0xFFFC00FF);
+  static const Color backgroundBlue = const Color(0xFF00DBDE);
 
   static const primaryGradient = const LinearGradient(
     colors: [
