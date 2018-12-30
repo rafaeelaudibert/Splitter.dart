@@ -5,6 +5,7 @@ Cross-platform money-splitting app to organize your travels and apartments money
 ---
 
 ## TodoList
+- [ ] Logo
 - [ ] Splash Screen
 - [ ] Home Page Layout
 - [ ] AppBar

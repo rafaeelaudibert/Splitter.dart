@@ -30,14 +30,13 @@ class Colors {
 
   const Colors();
 
-  static const Color loginGradientStart = const Color(0xFFfbab66);
-  static const Color loginGradientEnd = const Color(0xFFf7418c);
-  static const Color socialMedia = const Color(0xFF0084ff);
+  static const Color backgroundPink = const Color(0xFFfc00ff);
+  static const Color backgroundBlue = const Color(0xFF00dbde);
 
   static const primaryGradient = const LinearGradient(
     colors: [
-      loginGradientStart,
-      loginGradientEnd
+      backgroundPink,
+      backgroundBlue
     ],
     begin: const FractionalOffset(0.0, 0.0),
     end: const FractionalOffset(1.0, 1.0),
@@ -47,8 +46,8 @@ class Colors {
 
   static const invertedPrimaryGradient = const LinearGradient(
     colors: [
-      loginGradientStart,
-      loginGradientEnd
+      backgroundPink,
+      backgroundBlue
     ],
     begin: const FractionalOffset(1.0, 1.0),
     end: const FractionalOffset(0.0, 0.0),
@@ -58,12 +57,12 @@ class Colors {
 
   static const boxShadow = <BoxShadow>[
     BoxShadow(
-      color: loginGradientStart,
+      color: backgroundPink,
       offset: Offset(1.0, 6.0),
       blurRadius: 20.0,
     ),
     BoxShadow(
-      color: loginGradientEnd,
+      color: backgroundBlue,
       offset: Offset(1.0, 6.0),
       blurRadius: 20.0,
     ),
