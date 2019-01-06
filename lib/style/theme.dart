@@ -26,33 +26,24 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 
 class Colors {
-
   const Colors();
 
   static const Color backgroundPink = const Color(0xFFFC00FF);
   static const Color backgroundBlue = const Color(0xFF00DBDE);
 
   static const primaryGradient = const LinearGradient(
-    colors: [
-      backgroundPink,
-      backgroundBlue
-    ],
-    begin: const FractionalOffset(0.0, 0.0),
-    end: const FractionalOffset(1.0, 1.0),
-    stops: [0.0, 1.0],
-    tileMode: TileMode.clamp
-  );
+      colors: [backgroundPink, backgroundBlue],
+      begin: const FractionalOffset(0.0, 0.0),
+      end: const FractionalOffset(1.0, 1.0),
+      stops: [0.0, 1.0],
+      tileMode: TileMode.clamp);
 
   static const invertedPrimaryGradient = const LinearGradient(
-    colors: [
-      backgroundPink,
-      backgroundBlue
-    ],
-    begin: const FractionalOffset(1.0, 1.0),
-    end: const FractionalOffset(0.0, 0.0),
-    stops: [0.0, 1.0],
-    tileMode: TileMode.clamp
-  );
+      colors: [backgroundPink, backgroundBlue],
+      begin: const FractionalOffset(1.0, 1.0),
+      end: const FractionalOffset(0.0, 0.0),
+      stops: [0.0, 1.0],
+      tileMode: TileMode.clamp);
 
   static const boxShadow = <BoxShadow>[
     BoxShadow(

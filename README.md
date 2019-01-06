@@ -5,13 +5,14 @@ Cross-platform money-splitting app to organize your travels and apartments money
 ---
 
 ## TodoList
-- [ ] Logo
-- [ ] Splash Screen
+- [x] Logo
+- [x] Splash Screen
+- [x] Login Layout
+- [ ] Login functionality
 - [ ] Home Page Layout
 - [ ] AppBar
 - [ ] Individual splitting functionality
 - [ ] Group splitting functionality
-- [ ] Connect with Firebase
-- [ ] Login functionality
 - [ ] Add Local Storage to store JWT for login
+- [ ] Connect with Firebase
 

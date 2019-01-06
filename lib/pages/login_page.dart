@@ -23,9 +23,11 @@
 */
 
 import 'dart:math';
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:splitter/bloc/auth_bloc.dart';
 import 'package:splitter/style/theme.dart' as Theme;
 import 'package:splitter/utils/bubble_indication_painter.dart';
 
@@ -33,12 +35,11 @@ class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
@@ -48,8 +49,8 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
 
-  TextEditingController loginEmailController = new TextEditingController();
-  TextEditingController loginPasswordController = new TextEditingController();
+  TextEditingController loginEmailController = TextEditingController();
+  TextEditingController loginPasswordController = TextEditingController();
 
   bool _obscureTextLogin = true;
   bool _obscureTextSignup = true;
@@ -66,6 +67,17 @@ class _LoginPageState extends State<LoginPage>
   Color left = Colors.black;
   Color right = Colors.white;
 
+  _onLoginButtonPressed(AuthBloc authBloc) async {
+    await authBloc.logIn(
+        loginEmailController.text, loginPasswordController.text);
+
+    if (authBloc.state == AuthState.loggedIn) {
+      showInSnackBar("Logged in!");
+      // Navigator.popAndPushNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -75,58 +87,59 @@ class _LoginPageState extends State<LoginPage>
           overscroll.disallowGlow();
         },
         child: SingleChildScrollView(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                height: max(MediaQuery.of(context).size.height, 775.0),
-                decoration: new BoxDecoration(gradient: Theme.Colors.primaryGradient),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 75.0),
-                      child: new Image(
-                          width: 250.0,
-                          height: 191.0,
-                          fit: BoxFit.scaleDown,
-                          image: new AssetImage('assets/img/login_logo.png')),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: _buildMenuBar(context),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (i) {
-                          if (i == 0) {
-                            setState(() {
-                              right = Colors.white;
-                              left = Colors.black;
-                            });
-                          } else if (i == 1) {
-                            setState(() {
-                              right = Colors.black;
-                              left = Colors.white;
-                            });
-                          }
-                        },
-                        children: <Widget>[
-                          new ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignIn(context),
-                          ),
-                          new ConstrainedBox(
-                            constraints: const BoxConstraints.expand(),
-                            child: _buildSignUp(context),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: max(MediaQuery.of(context).size.height, 775.0),
+            decoration:
+                new BoxDecoration(gradient: Theme.Colors.primaryGradient),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 75.0),
+                  child: new Image(
+                      width: 250.0,
+                      height: 191.0,
+                      fit: BoxFit.scaleDown,
+                      image: new AssetImage('assets/img/login_logo.png')),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(top: 20.0),
+                  child: _buildMenuBar(context),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: PageView(
+                    controller: _pageController,
+                    onPageChanged: (i) {
+                      if (i == 0) {
+                        setState(() {
+                          right = Colors.white;
+                          left = Colors.black;
+                        });
+                      } else if (i == 1) {
+                        setState(() {
+                          right = Colors.black;
+                          left = Colors.white;
+                        });
+                      }
+                    },
+                    children: <Widget>[
+                      new ConstrainedBox(
+                        constraints: const BoxConstraints.expand(),
+                        child: _buildSignIn(context),
+                      ),
+                      new ConstrainedBox(
+                        constraints: const BoxConstraints.expand(),
+                        child: _buildSignUp(context),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
+          ),
+        ),
       ),
     );
   }
@@ -155,7 +168,7 @@ class _LoginPageState extends State<LoginPage>
   void showInSnackBar(String value) {
     FocusScope.of(context).requestFocus(FocusNode());
     _scaffoldKey.currentState?.removeCurrentSnackBar();
-    
+
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text(
         value,
@@ -218,132 +231,173 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildSignIn(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.only(top: 23.0),
-      child: Column(
-        children: <Widget>[
-          Stack(
-            alignment: Alignment.topCenter,
-            overflow: Overflow.visible,
+    final AuthBloc authBloc = BlocProvider.of<AuthBloc>(context);
+
+    return StreamBuilder(
+      stream: authBloc.stream,
+      builder: (context, snapshot) {
+        return Container(
+          padding: EdgeInsets.only(top: 23.0),
+          child: Column(
             children: <Widget>[
-              Card(
-                elevation: 2.0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Container(
-                  width: 300.0,
-                  height: 190.0,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodeEmailLogin,
-                          controller: loginEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                              size: 22.0,
-                            ),
-                            hintText: "Email Address",
-                            hintStyle: TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                          ),
-                        ),
-                      ),
-                      Container(width: 250.0, height: 1.0, color: Colors.grey[400]),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodePasswordLogin,
-                          controller: loginPasswordController,
-                          obscureText: _obscureTextLogin,
-                          style: TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.lock,
-                              size: 22.0,
-                              color: Colors.black,
-                            ),
-                            hintText: "Password",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleLogin,
-                              child: Icon(
-                                FontAwesomeIcons.eye,
-                                size: 15.0,
-                                color: Colors.black,
+              Stack(
+                alignment: Alignment.topCenter,
+                overflow: Overflow.visible,
+                children: <Widget>[
+                  Card(
+                    elevation: 2.0,
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Container(
+                      width: 300.0,
+                      height: 190.0,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 25.0),
+                            child: TextField(
+                              focusNode: myFocusNodeEmailLogin,
+                              controller: loginEmailController,
+                              keyboardType: TextInputType.emailAddress,
+                              style: TextStyle(
+                                  fontFamily: "WorkSansSemiBold",
+                                  fontSize: 16.0,
+                                  color: Colors.black),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                icon: Icon(
+                                  FontAwesomeIcons.envelope,
+                                  color: snapshot.data == AuthState.loginFailure
+                                      ? Colors.red
+                                      : Colors.black,
+                                  size: 22.0,
+                                ),
+                                hintText: "Email Address",
+                                hintStyle: TextStyle(
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 17.0),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 170.0),
-                decoration: new BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: Theme.Colors.boxShadow,
-                  gradient: new LinearGradient(
-                      colors: [
-                        Theme.Colors.backgroundBlue,
-                        Theme.Colors.backgroundPink
-                      ],
-                      begin: const FractionalOffset(0.2, 0.2),
-                      end: const FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Theme.Colors.backgroundBlue.withOpacity(0.3),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 12.0, horizontal: 75.0),
-                      child: Text(
-                        "LOGIN",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 21.0,
-                            fontFamily: "WorkSansBold"),
+                          Container(
+                              width: 250.0,
+                              height: 1.0,
+                              color: Colors.grey[400]),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20.0, horizontal: 25.0),
+                            child: TextField(
+                              focusNode: myFocusNodePasswordLogin,
+                              controller: loginPasswordController,
+                              obscureText: _obscureTextLogin,
+                              style: TextStyle(
+                                  fontFamily: "WorkSansSemiBold",
+                                  fontSize: 16.0,
+                                  color: Colors.black),
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                icon: Icon(
+                                  FontAwesomeIcons.lock,
+                                  size: 22.0,
+                                  color: snapshot.data == AuthState.loginFailure
+                                      ? Colors.red
+                                      : Colors.black,
+                                ),
+                                hintText: "Password",
+                                hintStyle: TextStyle(
+                                    fontFamily: "WorkSansSemiBold",
+                                    fontSize: 17.0),
+                                suffixIcon: GestureDetector(
+                                  onTap: _toggleLogin,
+                                  child: Icon(
+                                    FontAwesomeIcons.eye,
+                                    size: 15.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar("Login button pressed")),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 170.0),
+                    decoration: new BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      boxShadow: Theme.Colors.boxShadow,
+                      gradient: new LinearGradient(
+                          colors: [
+                            Theme.Colors.backgroundBlue,
+                            Theme.Colors.backgroundPink
+                          ],
+                          begin: const FractionalOffset(0.2, 0.2),
+                          end: const FractionalOffset(1.0, 1.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
+                    child: MaterialButton(
+                        height: 26.0,
+                        minWidth: 275.0,
+                        highlightColor: Colors.transparent,
+                        splashColor:
+                            Theme.Colors.backgroundBlue.withOpacity(0.3),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12.0, horizontal: 75.0),
+                          child: Container(
+                            height: 22.0,
+                            width: snapshot.data == AuthState.authenticating
+                                ? 22.0
+                                : 70.0,
+                            child: snapshot.data == AuthState.authenticating
+                                ? CircularProgressIndicator(
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.white),
+                                  )
+                                : Text(
+                                    "LOGIN",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22.0,
+                                        fontFamily: "WorkSansBold"),
+                                  ),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (snapshot.data == AuthState.loggedOut ||
+                              snapshot.data == AuthState.loginFailure) {
+                            _onLoginButtonPressed(authBloc);
+                            showInSnackBar("Attempting to sign in...");
+                          }
+                        }),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: FlatButton(
+                    onPressed: () {
+                      showInSnackBar(authBloc.toString());
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontFamily: "WorkSansMedium"),
+                    )),
               ),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 10.0),
-            child: FlatButton(
-                onPressed: () {},
-                child: Text(
-                  "Forgot Password?",
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontFamily: "WorkSansMedium"),
-                )),
-          ),         
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -368,7 +422,8 @@ class _LoginPageState extends State<LoginPage>
                   child: Column(
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeName,
                           controller: signupNameController,
@@ -390,9 +445,13 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      Container(width: 250.0, height: 1.0, color: Colors.grey[400]), // Grey bar
+                      Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400]), // Grey bar
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 25.0),
                         child: TextField(
                           focusNode: myFocusNodeEmail,
                           controller: signupEmailController,
@@ -413,9 +472,13 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      Container(width: 250.0, height: 1.0, color: Colors.grey[400]), // Grey bar
+                      Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400]), // Grey bar
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 25.0),
                         child: TextField(
                           focusNode: myFocusNodePassword,
                           controller: signupPasswordController,
@@ -444,9 +507,13 @@ class _LoginPageState extends State<LoginPage>
                           ),
                         ),
                       ),
-                      Container(width: 250.0, height: 1.0, color: Colors.grey[400]), // Grey bar
+                      Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400]), // Grey bar
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20.0, horizontal: 25.0),
                         child: TextField(
                           controller: signupConfirmPasswordController,
                           obscureText: _obscureTextSignupConfirm,
@@ -499,8 +566,7 @@ class _LoginPageState extends State<LoginPage>
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
-                    onPressed: () =>
-                        showInSnackBar("SignUp button pressed")),
+                    onPressed: () => showInSnackBar("SignUp button pressed")),
               ),
             ],
           ),
