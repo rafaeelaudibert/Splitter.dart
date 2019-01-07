@@ -1,6 +1,7 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:splitter/bloc/auth_bloc.dart';
+import 'package:splitter/pages/splash_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -14,11 +15,14 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Image(
-                width: 250.0,
-                height: 191.0,
-                fit: BoxFit.scaleDown,
-                image: new AssetImage('assets/img/login_logo.png'),
+              Hero(
+                tag: 'logo',
+                child: new Image(
+                  width: 250.0,
+                  height: 191.0,
+                  fit: BoxFit.scaleDown,
+                  image: new AssetImage('assets/img/login_logo.png'),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(bottom: 20.0),
@@ -27,7 +31,11 @@ class HomePage extends StatelessWidget {
                 child: Text('Logout'),
                 onPressed: () async {
                   await BlocProvider.of<AuthBloc>(context).logOut();
-                  Navigator.pushReplacementNamed(context, '/');
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SplashScreen(originalSize: 191.0)));
                 },
               ),
             ],

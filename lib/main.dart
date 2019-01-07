@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:splitter/bloc/auth_bloc.dart';
 import 'package:splitter/pages/home_page.dart';
 import 'package:splitter/pages/login_page.dart';
+import 'package:splitter/pages/splash_page.dart';
 
 void main() => runApp(new Splitter());
 
@@ -14,7 +15,8 @@ class Splitter extends StatelessWidget {
       child: MaterialApp(
         initialRoute: '/',
         routes: {
-          '/': (context) => LoginPage(),
+          '/': (context) => SplashScreen(),
+          '/login': (context) => LoginPage(),
           '/home': (context) => HomePage(),
         },
       ),

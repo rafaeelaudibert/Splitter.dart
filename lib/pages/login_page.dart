@@ -73,7 +73,6 @@ class _LoginPageState extends State<LoginPage>
 
     if (authBloc.state == AuthState.loggedIn) {
       showInSnackBar("Logged in!");
-      // Navigator.popAndPushNamed(context, '/home');
       Navigator.pushReplacementNamed(context, '/home');
     }
   }
@@ -97,11 +96,14 @@ class _LoginPageState extends State<LoginPage>
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 75.0),
-                  child: new Image(
-                      width: 250.0,
-                      height: 191.0,
-                      fit: BoxFit.scaleDown,
-                      image: new AssetImage('assets/img/login_logo.png')),
+                  child: Hero(
+                    tag: 'logo',
+                    child: new Image(
+                        width: 250.0,
+                        height: 191.0,
+                        fit: BoxFit.scaleDown,
+                        image: new AssetImage('assets/img/login_logo.png')),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0),
