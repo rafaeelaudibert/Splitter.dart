@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:splitter/pages/login_page.dart';
+import 'package:splitter/utils/custom_hero.dart';
 import 'package:splitter/style/theme.dart' as Theme;
+import 'package:splitter/utils/routes_helper.dart';
 
 class SplashScreen extends StatefulWidget {
-  double _originalSize;
+  final double originalSize;
 
-  SplashScreen({double originalSize = 100.0}) {
-    this._originalSize = originalSize;
-  }
+  SplashScreen({Key key, this.originalSize});
 
-  _SplashScreenState createState() => _SplashScreenState(_originalSize);
+  _SplashScreenState createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen>
@@ -16,22 +17,26 @@ class _SplashScreenState extends State<SplashScreen>
   Animation<double> animation;
   AnimationController controller;
 
-  double originalSize;
-
-  _SplashScreenState(this.originalSize);
-
   initState() {
     super.initState();
     controller =
         AnimationController(duration: Duration(seconds: 2), vsync: this)
           ..addStatusListener((status) {
             if (status == AnimationStatus.completed) {
-              Future.delayed(Duration(seconds: 1),
-                  () => Navigator.pushReplacementNamed(context, '/login'));
+              Future.delayed(
+                Duration(seconds: 1),
+                () => pushAndReplace(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    ),
+              );
             }
           });
-    animation = Tween(begin: this.originalSize, end: 400.0).animate(controller)
-      ..addListener(() => setState(() {}));
+    animation = Tween(begin: widget.originalSize ?? 100.0, end: 400.0)
+        .animate(controller)
+          ..addListener(() => setState(() {}));
     controller.forward();
   }
 
@@ -49,17 +54,12 @@ class _SplashScreenState extends State<SplashScreen>
             decoration: BoxDecoration(
               gradient: Theme.Colors.primaryGradient,
             ),
-            child: Center(
-              child: Hero(
-                tag: 'logo',
-                child: new Image(
-                  width: 400.0,
-                  height: 100 + animation.value,
-                  fit: BoxFit.scaleDown,
-                  image: new AssetImage('assets/img/login_logo.png'),
-                ),
-              ),
-            ),
+          ),
+        ),
+        Center(
+          child: CustomHero(
+            photo: 'assets/img/login_logo.png',
+            height: animation.value,
           ),
         ),
       ],

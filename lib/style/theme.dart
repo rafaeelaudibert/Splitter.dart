@@ -38,6 +38,14 @@ class Colors {
       stops: [0.0, 1.0],
       tileMode: TileMode.clamp);
 
+  static const fadeGradient = const LinearGradient(
+    begin: Alignment.bottomCenter,
+    end: Alignment.topCenter,
+    colors: [Color(0x77FC00FF), Color(0x00FC00FF)],
+    stops: [0.0, 1.0],
+    tileMode: TileMode.clamp,
+  );
+
   static const invertedPrimaryGradient = const LinearGradient(
       colors: [backgroundPink, backgroundBlue],
       begin: const FractionalOffset(1.0, 1.0),
@@ -49,12 +57,29 @@ class Colors {
     BoxShadow(
       color: backgroundPink,
       offset: Offset(1.0, 6.0),
-      blurRadius: 20.0,
+      blurRadius: 15.0,
     ),
     BoxShadow(
       color: backgroundBlue,
       offset: Offset(1.0, 6.0),
-      blurRadius: 20.0,
+      blurRadius: 15.0,
+    ),
+  ];
+
+  static const boxShadowWithWhiteHalo = <BoxShadow>[
+    BoxShadow(
+      color: Color(0xFFFFFFFF),
+      spreadRadius: 25.0,
+    ),
+    BoxShadow(
+      color: backgroundPink,
+      offset: Offset(1.0, 6.0),
+      blurRadius: 30.0,
+    ),
+    BoxShadow(
+      color: backgroundBlue,
+      offset: Offset(1.0, 6.0),
+      blurRadius: 30.0,
     ),
   ];
 }

@@ -28,8 +28,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:splitter/bloc/auth_bloc.dart';
+import 'package:splitter/pages/home_page.dart';
+import 'package:splitter/utils/custom_hero.dart';
 import 'package:splitter/style/theme.dart' as Theme;
 import 'package:splitter/utils/bubble_indication_painter.dart';
+import 'package:splitter/utils/routes_helper.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -73,7 +76,14 @@ class _LoginPageState extends State<LoginPage>
 
     if (authBloc.state == AuthState.loggedIn) {
       showInSnackBar("Logged in!");
-      Navigator.pushReplacementNamed(context, '/home');
+      pushAndReplace(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+    } else if (authBloc.state == AuthState.loginFailure) {
+      showInSnackBar("Login failure!");
     }
   }
 
@@ -96,13 +106,9 @@ class _LoginPageState extends State<LoginPage>
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: 75.0),
-                  child: Hero(
-                    tag: 'logo',
-                    child: new Image(
-                        width: 250.0,
-                        height: 191.0,
-                        fit: BoxFit.scaleDown,
-                        image: new AssetImage('assets/img/login_logo.png')),
+                  child: CustomHero(
+                    photo: 'assets/img/login_logo.png',
+                    height: 191.0,
                   ),
                 ),
                 Padding(
