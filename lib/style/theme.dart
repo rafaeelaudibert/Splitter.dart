@@ -29,14 +29,43 @@ class Colors {
   const Colors();
 
   static const Color backgroundPink = const Color(0xFFFC00FF);
+  static const Color backgroundPinkWithAlpha = const Color(0x33FC00FF);
+  static const Color darkerBackgroundPink = const Color(0xFFFF33FF);
   static const Color backgroundBlue = const Color(0xFF00DBDE);
+  static const Color backgroundBlueWithAlpha = const Color(0x3300DBDE);
+  static const Color darkerBackgroundBlue = const Color(0xFF33FFFF);
+
+  static const blueGradient = const LinearGradient(
+    colors: [backgroundBlue, darkerBackgroundBlue],
+    begin: const FractionalOffset(0.0, 0.0),
+    end: const FractionalOffset(1.0, 1.0),
+    stops: [0.0, 1.0],
+    tileMode: TileMode.clamp,
+  );
 
   static const primaryGradient = const LinearGradient(
-      colors: [backgroundPink, backgroundBlue],
-      begin: const FractionalOffset(0.0, 0.0),
-      end: const FractionalOffset(1.0, 1.0),
-      stops: [0.0, 1.0],
-      tileMode: TileMode.clamp);
+    colors: [backgroundPink, backgroundBlue],
+    begin: const FractionalOffset(0.0, 0.0),
+    end: const FractionalOffset(1.0, 1.0),
+    stops: [0.0, 1.0],
+    tileMode: TileMode.clamp,
+  );
+
+  static const invertedPrimaryGradient = const LinearGradient(
+    colors: [backgroundPink, backgroundBlue],
+    begin: const FractionalOffset(1.0, 1.0),
+    end: const FractionalOffset(0.0, 0.0),
+    stops: [0.0, 1.0],
+    tileMode: TileMode.clamp,
+  );
+
+  static const invertedPrimaryGradientWithAlpha = const LinearGradient(
+    colors: <Color>[backgroundPinkWithAlpha, backgroundBlueWithAlpha],
+    begin: const FractionalOffset(1.0, 1.0),
+    end: const FractionalOffset(0.0, 0.0),
+    stops: [0.0, 1.0],
+    tileMode: TileMode.clamp,
+  );
 
   static const fadeGradient = const LinearGradient(
     begin: Alignment.bottomCenter,
@@ -45,13 +74,6 @@ class Colors {
     stops: [0.0, 1.0],
     tileMode: TileMode.clamp,
   );
-
-  static const invertedPrimaryGradient = const LinearGradient(
-      colors: [backgroundPink, backgroundBlue],
-      begin: const FractionalOffset(1.0, 1.0),
-      end: const FractionalOffset(0.0, 0.0),
-      stops: [0.0, 1.0],
-      tileMode: TileMode.clamp);
 
   static const boxShadow = <BoxShadow>[
     BoxShadow(
@@ -66,20 +88,12 @@ class Colors {
     ),
   ];
 
-  static const boxShadowWithWhiteHalo = <BoxShadow>[
+  static const blackBoxShadow = <BoxShadow>[
     BoxShadow(
-      color: Color(0xFFFFFFFF),
-      spreadRadius: 25.0,
-    ),
-    BoxShadow(
-      color: backgroundPink,
+      color: Color(0x66666666),
       offset: Offset(1.0, 6.0),
-      blurRadius: 30.0,
-    ),
-    BoxShadow(
-      color: backgroundBlue,
-      offset: Offset(1.0, 6.0),
-      blurRadius: 30.0,
+      spreadRadius: 5.0,
+      blurRadius: 20.0,
     ),
   ];
 }

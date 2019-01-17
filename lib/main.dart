@@ -17,6 +17,7 @@ class Splitter extends StatelessWidget {
             child: child,
           );
         },
+        theme: ThemeData(fontFamily: 'WorkSansSemiBold'),
         home: SplashScreen(),
       ),
     );
