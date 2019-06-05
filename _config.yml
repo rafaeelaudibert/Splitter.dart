@@ -1,1 +1,4 @@
 theme: jekyll-theme-minimal
+logo: './assets/logo.png'
+title: 'Splitter'
+description: 'Cross-platform money-splitting app'
